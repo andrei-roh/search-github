@@ -1,31 +1,37 @@
-import { useState } from 'react';
-import { StyleSheet, Linking, Text, TouchableHighlight, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  Linking,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import { IContent } from '../../types';
 
 const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
   const [page, setPage] = useState(1);
-  let stepsArray = [0];
+  const stepsArray = [0];
   let step = 4;
   for (let i = 0; i < public_repos / 4; i += 1) {
     stepsArray.push(step);
     step += 4;
   }
-  let paginateUserRepositoryInfo = (pageNumber: number) => {
+  const paginateUserRepositoryInfo = (pageNumber: number) => {
     return userRepositoryInfo
       .slice(0, public_repos)
       .slice(stepsArray[pageNumber - 1], stepsArray[pageNumber]);
   };
-  let getNecessaryRepositoryInfo = paginateUserRepositoryInfo(page).map(
+  const getNecessaryRepositoryInfo = paginateUserRepositoryInfo(page).map(
     (element: any) => (
-        <View style={styles.card} key={element.name}>
-            <TouchableHighlight onPress={() => Linking.openURL(element.html_url)}>
-                <Text style={styles.name}>{element.name}</Text>
-            </TouchableHighlight>
-            <Text>{element.description}</Text>
-        </View>  
+      <View style={styles.card} key={element.name}>
+        <TouchableHighlight onPress={() => Linking.openURL(element.html_url)}>
+          <Text style={styles.name}>{element.name}</Text>
+        </TouchableHighlight>
+        <Text style={styles.description}>{element.description}</Text>
+      </View>
     )
   );
-  let getPaginationCount = Math.ceil(public_repos / 4);
+  const getPaginationCount = Math.ceil(public_repos / 4);
   const firstNumberItems = () => {
     if (stepsArray[page - 1] === 0) {
       return 1;
@@ -41,12 +47,14 @@ const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
 
   return (
     <View style={styles.content}>
-        <Text style={styles.repositories}>Repositories ({public_repos})</Text>
-        {getNecessaryRepositoryInfo}
-        <Text>{firstNumberItems()}-{lastNumberItems()} of {public_repos} items</Text>
+      <Text style={styles.repositories}>Repositories ({public_repos})</Text>
+      {getNecessaryRepositoryInfo}
+      <Text>
+        {firstNumberItems()}-{lastNumberItems()} of {public_repos} items
+      </Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   content: {
@@ -69,7 +77,11 @@ const styles = StyleSheet.create({
   },
   name: {
     color: '#0064eb',
-  }
+    fontFamily: 'UbuntuCondensed_400Regular',
+  },
+  description: {
+    fontFamily: 'UbuntuCondensed_400Regular',
+  },
 });
 
 export default Content;

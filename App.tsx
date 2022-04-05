@@ -1,20 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import Header from './components/Header/Header';
+import Empty from './components/Empty/Empty';
 import Main from './components/Main/Main';
+import Spinnner from './components/Spinner/Spinner';
 
 const App = () => {
   const [searchValue, setSearchValue] = useState('');
 
-  let [userInfo, getUserInfo] = useState({});
-  let [userRepositoryInfo, getUserRepositoryInfo] = useState<any>([]);
-  let [showUserScreen, setShowUserScreen] = useState(false);
-  let [showSpinner, setShowSpinner] = useState(false);
-  let [showEmptyUser, setShowEmptyUser] = useState(false);
+  const [userInfo, getUserInfo] = useState({});
+  const [userRepositoryInfo, getUserRepositoryInfo] = useState<any>([]);
+  const [showUserScreen, setShowUserScreen] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [showEmptyUser, setShowEmptyUser] = useState(false);
 
   const onKeyPressHandler = async (event: any) => {
     setShowSpinner(!showSpinner);
-    setShowEmptyUser((showEmptyUser = false));
+    setShowEmptyUser(false);
     getUserRepositoryInfo([]);
     let repositoryPages = 0;
     event.preventDefault();
@@ -22,7 +24,7 @@ const App = () => {
     await fetch(`${URL}/${searchValue}`)
       .then(function (response) {
         if (response.status === 404) {
-          setShowEmptyUser((showEmptyUser = true));
+          setShowEmptyUser(true);
         }
         return response.json();
       })
@@ -36,11 +38,14 @@ const App = () => {
           return response.json();
         })
         .then(function (respData) {
-          getUserRepositoryInfo((prevState: any) => [...prevState, ...respData]);
+          getUserRepositoryInfo((prevState: any) => [
+            ...prevState,
+            ...respData,
+          ]);
         });
     }
-    setShowUserScreen((showUserScreen = true));
-    setShowSpinner((showSpinner = false));
+    setShowUserScreen(true);
+    setShowSpinner(false);
   };
 
   return (
@@ -50,14 +55,20 @@ const App = () => {
         setSearchValue={setSearchValue}
         onKeyPressHandler={onKeyPressHandler}
       />
-      <Main 
-        userInfo={userInfo}
-        userRepositoryInfo={userRepositoryInfo}
-        showUserScreen={showUserScreen}
-      />
+      {showSpinner ? (
+        <Spinnner />
+      ) : showEmptyUser ? (
+        <Empty />
+      ) : (
+        <Main
+          userInfo={userInfo}
+          userRepositoryInfo={userRepositoryInfo}
+          showUserScreen={showUserScreen}
+        />
+      )}
       <StatusBar style="auto" />
     </>
   );
-}
+};
 
 export default App;
