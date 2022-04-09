@@ -4,7 +4,7 @@ import {
   Image,
   Linking,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { IHeader } from '../types';
@@ -28,12 +28,12 @@ const Header: React.FC<IHeader> = ({
 
   return (
     <View style={styles.header}>
-      <TouchableHighlight onPress={() => Linking.openURL('http://github.com')}>
+      <TouchableOpacity onPress={() => Linking.openURL('http://github.com')}>
         <Image
           style={styles.github}
           source={require('./img/github-icon.png')}
         />
-      </TouchableHighlight>
+      </TouchableOpacity>
       <TextInput
         style={styles.search}
         placeholder="Enter GitHub username"

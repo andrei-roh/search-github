@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Linking,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   Image,
   View,
 } from 'react-native';
@@ -29,9 +29,9 @@ const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
     userRepositoryInfo
   ).map((element: any) => (
     <View style={styles.card} key={element.name}>
-      <TouchableHighlight onPress={() => Linking.openURL(element.html_url)}>
+      <TouchableOpacity onPress={() => Linking.openURL(element.html_url)}>
         <Text style={styles.name}>{element.name}</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
       <Text style={styles.description}>{element.description}</Text>
     </View>
   ));
@@ -46,7 +46,7 @@ const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
         items
       </Text>
       <View style={styles.indicators}>
-        <TouchableHighlight
+        <TouchableOpacity
           disabled={page === 1}
           onPress={() => changePage('Previous', setPage, page)}
         >
@@ -54,14 +54,14 @@ const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
             style={[styles.arrow, styles.arrowLeft]}
             source={require('./img/arrow-icon.png')}
           />
-        </TouchableHighlight>
+        </TouchableOpacity>
         <PaginationDot
           activeDotColor="#0064eb"
           curPage={page - 1}
           maxPage={getPaginationCount(public_repos)}
           sizeRatio={2}
         />
-        <TouchableHighlight
+        <TouchableOpacity
           disabled={page === getPaginationCount(public_repos)}
           onPress={() => changePage('Next', setPage, page)}
         >
@@ -69,7 +69,7 @@ const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
             style={styles.arrow}
             source={require('./img/arrow-icon.png')}
           />
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 320,
-    borderWidth: 1,
+    backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
     marginTop: 5,

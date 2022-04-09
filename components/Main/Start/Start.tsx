@@ -16,9 +16,11 @@ const Start = () => {
 
   return (
     <View style={styles.origin}>
-      <Image style={styles.start} source={require('./img/start-icon.png')} />
-      <Text style={styles.slogan}>Start with searching</Text>
-      <Text style={styles.slogan}>a GitHub user</Text>
+      <View style={styles.block}>
+        <Image style={styles.start} source={require('./img/start-icon.png')} />
+        <Text style={styles.slogan}>Start with searching</Text>
+        <Text style={styles.slogan}>a GitHub user</Text>
+      </View>
     </View>
   );
 };
@@ -27,11 +29,18 @@ const styles = StyleSheet.create({
   origin: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 55,
-    marginRight: 55,
-    height: '80%',
+    height: '100%',
+    backgroundColor: '#e5e5e5',
+  },
+  block: {
+    alignItems: 'center',
+    height: '50%',
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
   start: {
+    marginLeft: 55,
+    marginRight: 55,
     width: 150,
     height: 150,
     marginBottom: 15,

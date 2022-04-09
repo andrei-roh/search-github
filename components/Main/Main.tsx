@@ -4,7 +4,7 @@ import {
   Image,
   Linking,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -37,9 +37,9 @@ const Main: React.FC<IMain> = ({
       >
         <Image style={styles.avatar} source={{ uri: avatar_url }} />
         <Text style={styles.name}>{name}</Text>
-        <TouchableHighlight onPress={() => Linking.openURL(html_url)}>
+        <TouchableOpacity onPress={() => Linking.openURL(html_url)}>
           <Text style={styles.login}>{login}</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
         <View style={styles.follow}>
           <View style={styles.followersBlock}>
             <Image
@@ -70,15 +70,14 @@ const Main: React.FC<IMain> = ({
 const styles = StyleSheet.create({
   main: {
     flex: 2,
-    backgroundColor: '#fff',
+    backgroundColor: '#e5e5e5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 45,
-    marginRight: 45,
     paddingTop: StatusBar.currentHeight,
   },
   scrollView: {
-    marginVertical: 20,
+    marginLeft: 45,
+    marginRight: 45,
   },
   name: {
     marginTop: 18,
@@ -87,6 +86,7 @@ const styles = StyleSheet.create({
     fontFamily: 'UbuntuCondensed_400Regular',
   },
   avatar: {
+    marginTop: 20,
     width: 300,
     height: 300,
     borderRadius: 150,

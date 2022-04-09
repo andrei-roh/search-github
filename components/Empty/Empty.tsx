@@ -4,8 +4,10 @@ import { StyleSheet, Image, Text, View } from 'react-native';
 const Empty = () => {
   return (
     <View style={styles.blank}>
-      <Image style={styles.empty} source={require('./img/empty-icon.png')} />
-      <Text style={styles.lose}>User not found</Text>
+      <View style={styles.block}>
+        <Image style={styles.empty} source={require('./img/empty-icon.png')} />
+        <Text style={styles.lose}>User not found</Text>
+      </View>
     </View>
   );
 };
@@ -14,12 +16,18 @@ const styles = StyleSheet.create({
   blank: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 55,
-    marginRight: 55,
-    height: '80%',
+    height: '100%',
+    backgroundColor: '#e5e5e5',
+  },
+  block: {
+    alignItems: 'center',
+    height: '50%',
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
   empty: {
-    backgroundColor: '#fff',
+    marginLeft: 55,
+    marginRight: 55,
     width: 150,
     height: 150,
   },
