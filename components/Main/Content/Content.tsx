@@ -9,66 +9,46 @@ import {
 } from 'react-native';
 import PaginationDot from 'react-native-animated-pagination-dot';
 import { IContent } from '../../types';
+import { changePage } from './utils/changePage';
+import { firstNumberItems } from './utils/firstNumberItems';
+import { getPaginationCount } from './utils/getPaginationCount';
+import { getStepsArray } from './utils/getStepsArray';
+import { lastNumberItems } from './utils/lastNumberItems';
+import { paginateUserRepositoryInfo } from './utils/paginateUserRepositoryInfo';
 
 const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
   const [page, setPage] = useState(1);
   const stepsArray = [0];
-  let step = 4;
-  for (let i = 0; i < public_repos / 4; i += 1) {
-    stepsArray.push(step);
-    step += 4;
-  }
-  const paginateUserRepositoryInfo = (pageNumber: number) => {
-    return userRepositoryInfo
-      .slice(0, public_repos)
-      .slice(stepsArray[pageNumber - 1], stepsArray[pageNumber]);
-  };
-  const getNecessaryRepositoryInfo = paginateUserRepositoryInfo(page).map(
-    (element: any) => (
-      <View style={styles.card} key={element.name}>
-        <TouchableHighlight onPress={() => Linking.openURL(element.html_url)}>
-          <Text style={styles.name}>{element.name}</Text>
-        </TouchableHighlight>
-        <Text style={styles.description}>{element.description}</Text>
-      </View>
-    )
-  );
-  const getPaginationCount = Math.ceil(public_repos / 4);
-  const firstNumberItems = () => {
-    if (stepsArray[page - 1] === 0) {
-      return 1;
-    }
-    return stepsArray[page - 1];
-  };
-  const lastNumberItems = () => {
-    if (page === getPaginationCount) {
-      return public_repos;
-    }
-    return stepsArray[page];
-  };
 
-  const changePage = (action: string) => {
-    switch (action) {
-      case 'Next':
-        setPage(page + 1);
-        break;
-      case 'Previous':
-        setPage(page - 1);
-        break;
-    }
-  };
+  getStepsArray(stepsArray, public_repos);
+
+  const getNecessaryRepositoryInfo = paginateUserRepositoryInfo(
+    stepsArray,
+    page,
+    public_repos,
+    userRepositoryInfo
+  ).map((element: any) => (
+    <View style={styles.card} key={element.name}>
+      <TouchableHighlight onPress={() => Linking.openURL(element.html_url)}>
+        <Text style={styles.name}>{element.name}</Text>
+      </TouchableHighlight>
+      <Text style={styles.description}>{element.description}</Text>
+    </View>
+  ));
 
   return (
     <View style={styles.content}>
       <Text style={styles.repositories}>Repositories ({public_repos})</Text>
       {getNecessaryRepositoryInfo}
       <Text style={styles.items}>
-        {firstNumberItems()}-{lastNumberItems()} of {public_repos} items
+        {firstNumberItems(stepsArray, page)}-
+        {lastNumberItems(stepsArray, page, public_repos)} of {public_repos}{' '}
+        items
       </Text>
       <View style={styles.indicators}>
         <TouchableHighlight
           disabled={page === 1}
-          onPress={() => changePage('Previous')}
+          onPress={() => changePage('Previous', setPage, page)}
         >
           <Image
             style={[styles.arrow, styles.arrowLeft]}
@@ -78,12 +58,12 @@ const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
         <PaginationDot
           activeDotColor="#0064eb"
           curPage={page - 1}
-          maxPage={getPaginationCount}
+          maxPage={getPaginationCount(public_repos)}
           sizeRatio={2}
         />
         <TouchableHighlight
-          disabled={page === getPaginationCount}
-          onPress={() => changePage('Next')}
+          disabled={page === getPaginationCount(public_repos)}
+          onPress={() => changePage('Next', setPage, page)}
         >
           <Image
             style={styles.arrow}
