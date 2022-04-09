@@ -4,8 +4,10 @@ import {
   Linking,
   Text,
   TouchableHighlight,
+  Image,
   View,
 } from 'react-native';
+import PaginationDot from 'react-native-animated-pagination-dot';
 import { IContent } from '../../types';
 
 const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
@@ -45,13 +47,50 @@ const Content: React.FC<IContent> = ({ userRepositoryInfo, public_repos }) => {
     return stepsArray[page];
   };
 
+  const changePage = (action: string) => {
+    switch (action) {
+      case 'Next':
+        setPage(page + 1);
+        break;
+      case 'Previous':
+        setPage(page - 1);
+        break;
+    }
+  };
+
   return (
     <View style={styles.content}>
       <Text style={styles.repositories}>Repositories ({public_repos})</Text>
       {getNecessaryRepositoryInfo}
-      <Text>
+      <Text style={styles.items}>
         {firstNumberItems()}-{lastNumberItems()} of {public_repos} items
       </Text>
+      <View style={styles.indicators}>
+        <TouchableHighlight
+          disabled={page === 1}
+          onPress={() => changePage('Previous')}
+        >
+          <Image
+            style={[styles.arrow, styles.arrowLeft]}
+            source={require('./img/arrow-icon.png')}
+          />
+        </TouchableHighlight>
+        <PaginationDot
+          activeDotColor="#0064eb"
+          curPage={page - 1}
+          maxPage={getPaginationCount}
+          sizeRatio={2}
+        />
+        <TouchableHighlight
+          disabled={page === getPaginationCount}
+          onPress={() => changePage('Next')}
+        >
+          <Image
+            style={styles.arrow}
+            source={require('./img/arrow-icon.png')}
+          />
+        </TouchableHighlight>
+      </View>
     </View>
   );
 };
@@ -64,11 +103,21 @@ const styles = StyleSheet.create({
   },
   repositories: {
     marginTop: 40,
+    marginBottom: 20,
     fontWeight: 'bold',
     fontSize: 30,
   },
+  items: {
+    marginTop: 20,
+  },
+  indicators: {
+    flexDirection: 'row',
+    width: 300,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   card: {
-    width: 280,
+    width: 320,
     borderWidth: 1,
     borderRadius: 10,
     padding: 20,
@@ -81,6 +130,13 @@ const styles = StyleSheet.create({
   },
   description: {
     fontFamily: 'UbuntuCondensed_400Regular',
+  },
+  arrow: {
+    width: 20,
+    height: 20,
+  },
+  arrowLeft: {
+    transform: [{ rotate: '180deg' }],
   },
 });
 

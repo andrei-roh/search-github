@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 const Spinnner = () => {
   return (
     <View style={styles.blank}>
-      <ActivityIndicator size="large" />
+      <ActivityIndicator size="large" color="#0064eb" />
     </View>
   );
 };
